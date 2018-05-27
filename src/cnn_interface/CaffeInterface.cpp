@@ -24,9 +24,11 @@
 
 
 bool CaffeInterface::Init(const std::string& model_path, const std::string& weights) {
+  //Think that this reads in from a file and doesn't train the net
+  //omg ofc it doesnt train the net it doesnt take that long
   caffe::Caffe::SetDevice(0);
   caffe::Caffe::set_mode(caffe::Caffe::GPU);
-  network_.reset(new caffe::Net<float>(model_path, caffe::TEST));
+  network_.reset(new caffe::Net<float>(model_path, caffe::TEST)); //reset pointer to new Net
   network_->CopyTrainedLayersFrom(weights);
   initialised_ = true;
   return true;
@@ -89,7 +91,8 @@ std::shared_ptr<caffe::Blob<float> > CaffeInterface::ProcessFrame(const ImagePtr
     }
   }
   float loss;
-  const std::vector<caffe::Blob<float>* > output = network_->Forward(inputs,&loss);
+  //const std::vector<caffe::Blob<float>* > output = network_->Forward(inputs,&loss);
+  const std::vector<caffe::Blob<float>* > output = network_->Forward(&loss);
   if (!output_probabilities_) {
     output_probabilities_.reset(new caffe::Blob<float>(output[0]->shape()));
   }

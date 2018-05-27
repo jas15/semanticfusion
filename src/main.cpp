@@ -62,9 +62,11 @@ int main(int argc, char *argv[])
   const int crf_skip_frames = 500;
   const int crf_iterations = 10;
   // Load the network model and parameters
+  // TODO is there actually a way to save the model and reload instead of train every time?
+  // or is this what is actually happening thanks to the .caffemodel...
   CaffeInterface caffe;
   // This is for the RGB-D network
-  caffe.Init("../caffe_semanticfusion/models/nyu_rgbd/inference.prototxt","../caffe_semanticfusion/models/nyu_rgbd/inference.caffemodel");
+  caffe.Init("/home/nvidia/IndProj/SF/semanticfusion/caffe_semanticfusion/models/nyu_rgbd/inference.prototxt","/home/nvidia/IndProj/SF/semanticfusion/caffe_semanticfusion/models/nyu_rgbd/inference.caffemodel");
   // This is for the RGB network
   //caffe.Init("../caffe/models/nyu_rgb/inference.prototxt","../caffe/models/nyu_rgb/inference.caffemodel");
   const int num_classes = caffe.num_output_classes();
@@ -79,6 +81,8 @@ int main(int argc, char *argv[])
   Intrinsics::getInstance(528, 528, 320, 240);
   std::unique_ptr<Gui> gui(new Gui(true,class_colour_lookup,640,480));
   std::unique_ptr<ElasticFusionInterface> map(new ElasticFusionInterface());
+
+  std::cout<<"I LIKE CANDYYY 85"<<std::endl;
   // Choose the input Reader, live for a running OpenNI device, PNG for textfile lists of PNG frames
   std::unique_ptr<LogReader> log_reader;
   if (argc > 2) {
@@ -96,7 +100,9 @@ int main(int argc, char *argv[])
   // Frame numbers for logs
   int frame_num = 0;
   std::shared_ptr<caffe::Blob<float> > segmented_prob;
+  std::cout<<"I LIKE CANDYYY 103"<<std::endl;
   while(!pangolin::ShouldQuit() && log_reader->hasMore()) {
+    std::cout<<"I LIKE CANDYYY 105"<< frame_num << std::endl;
     gui->preCall();
     // Read and perform an elasticFusion update
     if (!gui->paused() || gui->step()) {
@@ -128,6 +134,7 @@ int main(int argc, char *argv[])
         semantic_fusion->CRFUpdate(map,crf_iterations);
       } 
     }
+    std::cout<<"I LIKE CANDYYY 137"<< frame_num << std::endl;
     frame_num++;
     // This is for outputting the predicted frames
     if (log_reader->isLabeledFrame()) {
@@ -158,6 +165,7 @@ int main(int argc, char *argv[])
         std::cout<<"ElasticFusionInterface init failure"<<std::endl;
       }
     }
+    std::cout<<"I LIKE CANDYYY 168"<< frame_num << std::endl;
   }
   std::cout<<"Finished SemanticFusion"<<std::endl;
   return 0;
