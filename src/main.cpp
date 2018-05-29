@@ -82,7 +82,6 @@ int main(int argc, char *argv[])
   std::unique_ptr<Gui> gui(new Gui(true,class_colour_lookup,640,480));
   std::unique_ptr<ElasticFusionInterface> map(new ElasticFusionInterface());
 
-  std::cout<<"I LIKE CANDYYY 85"<<std::endl;
   // Choose the input Reader, live for a running OpenNI device, PNG for textfile lists of PNG frames
   std::unique_ptr<LogReader> log_reader;
   if (argc > 2) {
@@ -100,9 +99,7 @@ int main(int argc, char *argv[])
   // Frame numbers for logs
   int frame_num = 0;
   std::shared_ptr<caffe::Blob<float> > segmented_prob;
-  std::cout<<"I LIKE CANDYYY 103"<<std::endl;
   while(!pangolin::ShouldQuit() && log_reader->hasMore()) {
-    std::cout<<"I LIKE CANDYYY 105"<< frame_num << std::endl;
     gui->preCall();
     // Read and perform an elasticFusion update
     if (!gui->paused() || gui->step()) {
@@ -134,7 +131,6 @@ int main(int argc, char *argv[])
         semantic_fusion->CRFUpdate(map,crf_iterations);
       } 
     }
-    std::cout<<"I LIKE CANDYYY 137"<< frame_num << std::endl;
     frame_num++;
     // This is for outputting the predicted frames
     if (log_reader->isLabeledFrame()) {
@@ -165,7 +161,6 @@ int main(int argc, char *argv[])
         std::cout<<"ElasticFusionInterface init failure"<<std::endl;
       }
     }
-    std::cout<<"I LIKE CANDYYY 168"<< frame_num << std::endl;
   }
   std::cout<<"Finished SemanticFusion"<<std::endl;
   return 0;
