@@ -29,6 +29,7 @@ MACRO(CUDA_COMPUTE_TARGET_FLAGS arch_bin arch_ptx cuda_nvcc_target_flags)
 	foreach(ARCH IN LISTS ARCH_LIST)				
 		set(cuda_computer_target_flags_temp ${cuda_computer_target_flags_temp} -gencode arch=compute_${ARCH},code=compute_${ARCH})				
 	endforeach()	
+  list(APPEND cuda_computer_target_flags_temp "-O3" "--use_fast_math" "--maxrregcount=45")
 							
 	set(${cuda_nvcc_target_flags} ${cuda_computer_target_flags_temp})		
 ENDMACRO()

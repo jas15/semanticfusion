@@ -18,14 +18,15 @@ add_subdirectory("${CMAKE_CURRENT_SOURCE_DIR}/caffe_semanticfusion")
 file(GLOB_RECURSE srcs src/*.cpp)
 file(GLOB_RECURSE cuda src/*.cu)
 
-set(CUDA_ARCH_BIN "30 35 50 52 61 62" CACHE STRING "Specify 'real' GPU arch to build binaries for, BIN(PTX) format is supported. Example: 1.3 2.1(1.3) or 13 21(13)")
-include(CudaComputeTargetFlags.cmake)                  
+set(CUDA_ARCH_BIN "61 62" CACHE STRING "Specify 'real' GPU arch to build binaries for, BIN(PTX) format is supported. Example: 1.3 2.1(1.3) or 13 21(13)")
+include(CudaComputeTargetFlags.cmake)
 APPEND_TARGET_ARCH_FLAGS()
 
 set(CUDA_NVCC_FLAGS ${CUDA_NVCC_FLAGS} "--ftz=true;--prec-div=false;--prec-sqrt=false") 
 set(CUDA_HOST_COMPILER gcc-5)
 
-set(CMAKE_CXX_FLAGS "-O3 -Wall -std=c++11")
+set(CMAKE_AARCH_FLAGS "-march=native -mtune=cortex-a57 -mcpu=cortex-a57")
+set(CMAKE_CXX_FLAGS "-Ofast -Wall -std=c++11 ${CMAKE_AARCH_FLAGS}")
 
 cuda_add_library(semantic_fusion_cuda_library SHARED ${cuda} )
 
